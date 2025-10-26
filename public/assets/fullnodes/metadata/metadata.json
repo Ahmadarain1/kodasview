@@ -1,0 +1,56 @@
+[
+  {
+    "tokenId": 1,
+    "name": "Full-Body Monke #1",
+    "inscriptionId": "FULLNODE-00001",
+    "description": "The first Full-Body NodeMonke in the collection",
+    "image": "/assets/fullnodes/images/1.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Red" },
+      { "trait_type": "Eyes", "value": "Laser" },
+      { "trait_type": "Head", "value": "Crown" },
+      { "trait_type": "Earring", "value": "Diamond" },
+      { "trait_type": "Mouth", "value": "Smile" },
+      { "trait_type": "Background", "value": "Solid" },
+      { "trait_type": "Clothes", "value": "Suit" },
+      { "trait_type": "Hat", "value": "Top Hat" },
+      { "trait_type": "Accessories", "value": "Sunglasses" }
+    ]
+  },
+  {
+    "tokenId": 2,
+    "name": "Full-Body Monke #2",
+    "inscriptionId": "FULLNODE-00002",
+    "description": "A unique Full-Body Monke with special traits",
+    "image": "/assets/fullnodes/images/2.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Blue" },
+      { "trait_type": "Eyes", "value": "Normal" },
+      { "trait_type": "Head", "value": "Cap" },
+      { "trait_type": "Earring", "value": "Gold" },
+      { "trait_type": "Mouth", "value": "Open" },
+      { "trait_type": "Background", "value": "Gradient" },
+      { "trait_type": "Clothes", "value": "T-Shirt" },
+      { "trait_type": "Hat", "value": "Baseball" },
+      { "trait_type": "Accessories", "value": "None" }
+    ]
+  },
+  {
+    "tokenId": 3,
+    "name": "Full-Body Monke #3",
+    "inscriptionId": "FULLNODE-00003",
+    "description": "Rare Full-Body Monke with multiple accessories",
+    "image": "/assets/fullnodes/images/3.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Green" },
+      { "trait_type": "Eyes", "value": "3D" },
+      { "trait_type": "Head", "value": "Helmet" },
+      { "trait_type": "Earring", "value": "Silver" },
+      { "trait_type": "Mouth", "value": "Tongue" },
+      { "trait_type": "Background", "value": "Stars" },
+      { "trait_type": "Clothes", "value": "Jacket" },
+      { "trait_type": "Hat", "value": "None" },
+      { "trait_type": "Accessories", "value": "Necklace" }
+    ]
+  }
+]

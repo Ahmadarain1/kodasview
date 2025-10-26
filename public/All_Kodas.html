@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Koda NFTs</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 6px;
+    }
+    .koda {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #111;
+    }
+    .koda img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+
+      const metadataUrl = 'https://ordinals.com/content/bb80ebc496c8062447be938a94e5763e2d273d3a3b6a5e0e81d7b79333137476i0';
+      const traitsUrl = 'https://ordinals.com/content/fec3ab3747625ad82fa981a00d3d0e78f9cc2e28a1d5033bed4b5bdabcb9f301i0';
+      const totalTokens = 10000; // Number of Kodas to render
+      const batchSize = 100; // Number to load at once for performance
+      let currentIndex = 1;
+
+      // helper to decompress gzip json
+      async function loadCompressedJson(url) {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+        const blob = await res.blob();
+        const ds = new DecompressionStream("gzip");
+        const stream = blob.stream().pipeThrough(ds);
+        const buf = await new Response(stream).arrayBuffer();
+        return JSON.parse(new TextDecoder("utf-8").decode(buf));
+      }
+
+      try {
+        console.log("Loading metadata and traits...");
+        const [metadata, traits] = await Promise.all([
+          loadCompressedJson(metadataUrl),
+          loadCompressedJson(traitsUrl)
+        ]);
+
+        console.log("Metadata items:", metadata.length);
+        console.log("Traits types:", Object.keys(traits).length);
+
+        // main render loop
+        async function renderBatch(startId) {
+          const endId = Math.min(startId + batchSize - 1, totalTokens);
+          console.log(`Rendering Kodas ${startId} to ${endId}`);
+
+          for (let id = startId; id <= endId; id++) {
+            const tokenData = metadata.find(item => item.e === id);
+            if (!tokenData) {
+              console.warn(`Token ${id} not found in metadata`);
+              continue;
+            }
+
+            const container = document.createElement('div');
+            container.classList.add('koda');
+
+            // Layer each trait image
+            for (const attr of tokenData.a) {
+              const traitType = Object.keys(traits).find(
+                key => key.toLowerCase() === attr.t.toLowerCase()
+              );
+              if (!traitType) continue;
+
+              const traitKeys = Object.keys(traits[traitType]);
+              const matchKey = traitKeys.find(k => k.split('#')[0].toLowerCase() === attr.v.toLowerCase());
+              if (!matchKey) continue;
+
+              const imgUrl = `https://ordinals.com/content/${traits[traitType][matchKey]}`;
+              const img = document.createElement('img');
+              img.src = imgUrl;
+              container.appendChild(img);
+            }
+
+            document.body.appendChild(container);
+          }
+
+          // schedule next batch
+          if (endId < totalTokens) {
+            setTimeout(() => renderBatch(endId + 1), 1000); // wait 1s between batches
+          } else {
+            console.log("✅ All Kodas rendered");
+          }
+        }
+
+        // start first batch
+        renderBatch(currentIndex);
+
+      } catch (err) {
+        console.error("Error loading Kodas:", err);
+      }
+    });
+  </script>
+</body>
+</html>

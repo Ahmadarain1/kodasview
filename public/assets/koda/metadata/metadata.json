@@ -1,0 +1,146 @@
+[
+  {
+    "tokenId": 1,
+    "name": "KODA #1",
+    "inscriptionId": "KODA-00001",
+    "description": "A stylish KODA with purple cap and sunglasses",
+    "image": "/assets/koda/images/1.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Light Tan" },
+      { "trait_type": "Eyes", "value": "Sunglasses" },
+      { "trait_type": "Head", "value": "Purple Cap" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "Neutral" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Dark Green Shirt" },
+      { "trait_type": "Hat", "value": "Purple Cap" },
+      { "trait_type": "Accessories", "value": "Sunglasses" }
+    ]
+  },
+  {
+    "tokenId": 2,
+    "name": "KODA #2",
+    "inscriptionId": "KODA-00002",
+    "description": "A KODA with purple cap and distinctive side profile",
+    "image": "/assets/koda/images/2.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Light Tan" },
+      { "trait_type": "Eyes", "value": "White Rectangular" },
+      { "trait_type": "Head", "value": "Purple Cap" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "Neutral" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Dark Green" },
+      { "trait_type": "Hat", "value": "Purple Cap" },
+      { "trait_type": "Accessories", "value": "None" }
+    ]
+  },
+  {
+    "tokenId": 3,
+    "name": "KODA #3",
+    "inscriptionId": "KODA-00003",
+    "description": "An abstract KODA with green headband and tall ears",
+    "image": "/assets/koda/images/3.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Charcoal Gray" },
+      { "trait_type": "Eyes", "value": "Black Squares" },
+      { "trait_type": "Head", "value": "Green Headband" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "None" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "L-Shaped Armor" },
+      { "trait_type": "Hat", "value": "Green Headband" },
+      { "trait_type": "Accessories", "value": "Tall Ears" }
+    ]
+  },
+  {
+    "tokenId": 4,
+    "name": "KODA #4",
+    "inscriptionId": "KODA-00004",
+    "description": "A duck-like KODA with grey and white hat",
+    "image": "/assets/koda/images/4.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Yellow" },
+      { "trait_type": "Eyes", "value": "Black Rectangular" },
+      { "trait_type": "Head", "value": "Grey Hat" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "Beak" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Yellow Body" },
+      { "trait_type": "Hat", "value": "Grey and White Hat" },
+      { "trait_type": "Accessories", "value": "None" }
+    ]
+  },
+  {
+    "tokenId": 5,
+    "name": "KODA #5",
+    "inscriptionId": "KODA-00005",
+    "description": "A unique KODA with colorful cap and single eye",
+    "image": "/assets/koda/images/5.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Yellow" },
+      { "trait_type": "Eyes", "value": "Single Red Eye" },
+      { "trait_type": "Head", "value": "Colorful Cap" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "White Beak" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Yellow Body" },
+      { "trait_type": "Hat", "value": "Multi-Color Cap" },
+      { "trait_type": "Accessories", "value": "None" }
+    ]
+  },
+  {
+    "tokenId": 6,
+    "name": "KODA #6",
+    "inscriptionId": "KODA-00006",
+    "description": "A futuristic KODA with blue mask and visor",
+    "image": "/assets/koda/images/6.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Light Tan" },
+      { "trait_type": "Eyes", "value": "White Rectangular" },
+      { "trait_type": "Head", "value": "Futuristic Visor" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "Hidden" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Dark Grey" },
+      { "trait_type": "Hat", "value": "Futuristic Visor" },
+      { "trait_type": "Accessories", "value": "Blue Mask" }
+    ]
+  },
+  {
+    "tokenId": 7,
+    "name": "KODA #7",
+    "inscriptionId": "KODA-00007",
+    "description": "A uniformed KODA with white cap and gold emblem",
+    "image": "/assets/koda/images/7.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Light Tan" },
+      { "trait_type": "Eyes", "value": "White Squares" },
+      { "trait_type": "Head", "value": "White Cap" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "Neutral" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Dark Grey Uniform" },
+      { "trait_type": "Hat", "value": "White Cap" },
+      { "trait_type": "Accessories", "value": "Gold Emblem" }
+    ]
+  },
+  {
+    "tokenId": 8,
+    "name": "KODA #8",
+    "inscriptionId": "KODA-00008",
+    "description": "A sophisticated KODA with blue beret",
+    "image": "/assets/koda/images/8.png",
+    "attributes": [
+      { "trait_type": "Body", "value": "Light Tan" },
+      { "trait_type": "Eyes", "value": "Large Black Rectangles" },
+      { "trait_type": "Head", "value": "Blue Beret" },
+      { "trait_type": "Earring", "value": "None" },
+      { "trait_type": "Mouth", "value": "None" },
+      { "trait_type": "Background", "value": "Orange" },
+      { "trait_type": "Clothes", "value": "Dark Forest Green" },
+      { "trait_type": "Hat", "value": "Blue Beret" },
+      { "trait_type": "Accessories", "value": "None" }
+    ]
+  }
+]

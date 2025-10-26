@@ -1,0 +1,59 @@
+{
+  "koda": {
+    "name": "KODA Collection",
+    "totalSupply": 10000,
+    "traitCategories": [
+      "Body",
+      "Eyes",
+      "Head",
+      "Earring",
+      "Mouth",
+      "Background",
+      "Clothes",
+      "Hat",
+      "Accessories"
+    ]
+  },
+  "fullnodes": {
+    "name": "Full-Body NodeMonkes",
+    "totalSupply": 10000,
+    "traitCategories": [
+      "Body",
+      "Eyes",
+      "Head",
+      "Earring",
+      "Mouth",
+      "Background",
+      "Clothes",
+      "Hat",
+      "Accessories"
+    ],
+    "backgrounds": {
+      "solid": [
+        { "name": "Black", "value": "#000000" },
+        { "name": "Dark Gray", "value": "#1a1a1a" },
+        { "name": "Navy Blue", "value": "#0a0f2e" },
+        { "name": "Deep Purple", "value": "#1a0a2e" },
+        { "name": "Forest Green", "value": "#0a2e1a" }
+      ],
+      "gradients": [
+        {
+          "name": "Blue to Purple",
+          "value": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        },
+        {
+          "name": "Pink to Orange",
+          "value": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+        },
+        {
+          "name": "Cyan to Blue",
+          "value": "linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%)"
+        },
+        {
+          "name": "Sunset",
+          "value": "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+        }
+      ]
+    }
+  }
+}
