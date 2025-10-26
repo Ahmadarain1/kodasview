@@ -265,24 +265,24 @@ export default function KodaViewer() {
               >
                 AUCTION RESULTS
               </a>
-              <a
+              {/* <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 TOP SALES
-              </a>
+              </a> */}
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 TWITTER
               </a>
-              <a
+              {/* <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 DISCORD
-              </a>
+              </a> */}
             </div>
           </div>
 

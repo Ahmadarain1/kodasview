@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-const NFTDetailModal = ({ nft, onClose }) => {
+const NFTDetailModal = ({ nft, onClose, onNext }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -47,6 +48,157 @@ const NFTDetailModal = ({ nft, onClose }) => {
     return imageUrls.length > 0 ? imageUrls : [`/placeholder.png`];
   };
 
+  // Function to composite multiple images into one
+  const compositeImages = async (imageUrls) => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Set canvas size (assuming square images)
+      canvas.width = 512;
+      canvas.height = 512;
+
+      let loadedImages = 0;
+      const images = [];
+
+      if (imageUrls.length === 0) {
+        reject(new Error("No images to composite"));
+        return;
+      }
+
+      // Load all images
+      imageUrls.forEach((url, index) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        img.onload = () => {
+          images[index] = img;
+          loadedImages++;
+
+          // When all images are loaded, composite them
+          if (loadedImages === imageUrls.length) {
+            // Draw each image on top of the previous ones
+            images.forEach((img) => {
+              if (img) {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              }
+            });
+
+            // Convert canvas to blob
+            canvas.toBlob((blob) => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error("Failed to create blob from canvas"));
+              }
+            }, "image/png");
+          }
+        };
+
+        img.onerror = () => {
+          console.warn(`Failed to load image ${index}:`, url);
+          loadedImages++;
+
+          // If this was the last image, try to composite what we have
+          if (loadedImages === imageUrls.length) {
+            images.forEach((img) => {
+              if (img) {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              }
+            });
+
+            canvas.toBlob((blob) => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error("Failed to create blob from canvas"));
+              }
+            }, "image/png");
+          }
+        };
+
+        img.src = url;
+      });
+    });
+  };
+
+  // Download function
+  const handleDownload = async () => {
+    if (isDownloading) return; // Prevent multiple downloads
+
+    setIsDownloading(true);
+    try {
+      const imageUrls = generateKodaImageUrls(nft);
+
+      // Check if it's a local placeholder
+      if (imageUrls.length === 1 && imageUrls[0] === "/placeholder.png") {
+        const link = document.createElement("a");
+        link.href = imageUrls[0];
+        link.download = `monke-${nft.id}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+      }
+
+      let blob;
+
+      if (imageUrls.length === 1) {
+        // Single image - fetch directly
+        const response = await fetch(imageUrls[0], {
+          mode: "cors",
+          headers: {
+            Accept: "image/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        blob = await response.blob();
+      } else {
+        // Multiple images - composite them
+        blob = await compositeImages(imageUrls);
+      }
+
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `monke-${nft.id}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up the blob URL
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      // Fallback: try to download placeholder
+      try {
+        const link = document.createElement("a");
+        link.href = "/placeholder.png";
+        link.download = `monke-${nft.id}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (fallbackError) {
+        console.error("Fallback download also failed:", fallbackError);
+        alert("Download failed. Please try again or contact support.");
+      }
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  // Next NFT function
+  const handleNext = () => {
+    if (onNext) {
+      onNext();
+    }
+  };
+
   if (!nft) return null;
 
   // Calculate rarity (mock calculation)
@@ -60,16 +212,16 @@ const NFTDetailModal = ({ nft, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-black border-4 border-white max-w-4xl w-full max-h-[80vh] overflow-hidden animate-scaleUp"
+        className="bg-black border-4 border-white max-w-4xl w-full max-h-[90vh] overflow-hidden animate-scaleUp"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with ESC button */}
         <div className="px-6 py-4 border-b-2 border-white bg-black flex items-center justify-between">
-          <div className="font-mono text-lg font-bold text-white uppercase tracking-wider">
+          <div className="font-mono text-lg font-semibold text-white uppercase tracking-widest">
             MONKE {nft.id} / INSCRIPTION {nft.inscriptionId || nft.id}
           </div>
           <button
-            className="font-mono text-base font-bold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors"
+            className="font-mono text-base font-semibold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors tracking-wider"
             onClick={onClose}
           >
             &lt;ESC&gt;
@@ -115,7 +267,7 @@ const NFTDetailModal = ({ nft, onClose }) => {
           {/* Right side - Details */}
           <div className="flex flex-col gap-4 bg-black">
             <div className="flex flex-col gap-2">
-              <div className="font-mono text-sm font-bold text-white uppercase tracking-wider">
+              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
                 RARITY - {rarity} / 10000
               </div>
 
@@ -124,26 +276,26 @@ const NFTDetailModal = ({ nft, onClose }) => {
                 nft.attributes.map((attr, index) => (
                   <div
                     key={index}
-                    className="font-mono text-sm font-bold text-white uppercase tracking-wider mb-1"
+                    className="font-mono text-sm font-semibold text-white uppercase tracking-wider mb-1"
                   >
                     {attr.trait_type.toUpperCase()} ▸ {attr.value.toUpperCase()}
                   </div>
                 ))
               ) : (
-                <div className="font-mono text-sm font-bold text-white uppercase tracking-wider">
+                <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
                   NO TRAITS AVAILABLE
                 </div>
               )}
 
-              <div className="font-mono text-sm font-bold text-white uppercase tracking-wider mb-1">
+              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider mb-1">
                 TRAIT COUNT ▸ {traitCount}
               </div>
 
-              <div className="font-mono text-sm font-bold text-white uppercase tracking-wider">
+              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
                 SIZE - {Math.floor(Math.random() * 500) + 200} BYTES
               </div>
 
-              <div className="font-mono text-sm font-bold text-white uppercase tracking-wider">
+              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
                 SAT -{" "}
                 {Math.floor(Math.random() * 1000000000000000) + 100000000000000}
               </div>
@@ -183,10 +335,21 @@ const NFTDetailModal = ({ nft, onClose }) => {
 
         {/* Footer buttons */}
         <div className="px-6 py-4 border-t-2 border-white bg-black flex justify-between items-center">
-          <button className="font-mono text-sm font-bold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors">
-            &lt;↓DOWNLOAD&gt;
+          <button
+            className={`font-mono text-sm font-semibold uppercase px-4 py-2 transition-colors border border-white hover:border-orange-500 tracking-wider ${
+              isDownloading
+                ? "text-orange-500 cursor-not-allowed"
+                : "text-white hover:text-orange-500"
+            }`}
+            onClick={handleDownload}
+            disabled={isDownloading}
+          >
+            {isDownloading ? "DOWNLOADING..." : "DOWNLOAD"}
           </button>
-          <button className="font-mono text-sm font-bold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors">
+          <button
+            className="font-mono text-sm font-semibold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors border border-white hover:border-orange-500 tracking-wider"
+            onClick={handleNext}
+          >
             NEXT →
           </button>
         </div>

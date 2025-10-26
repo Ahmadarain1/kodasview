@@ -137,9 +137,9 @@ export default function FullNodesViewer() {
             <div className="monkedex-header-links">
               <Link href="/">MONKEDEX</Link>
               <a href="#">AUCTION RESULTS</a>
-              <a href="#">TOP SALES</a>
+              {/* <a href="#">TOP SALES</a> */}
               <a href="#">TWITTER</a>
-              <a href="#">DISCORD</a>
+              {/* <a href="#">DISCORD</a> */}
             </div>
           </div>
 

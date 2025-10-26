@@ -16,7 +16,20 @@ module.exports = {
         "monke-accent": "#ff8c00",
       },
       fontFamily: {
-        monke: ["DOS NODE", "sans-serif"],
+        monke: [
+          "JetBrains Mono",
+          "Fira Code",
+          "Share Tech Mono",
+          "Courier New",
+          "monospace",
+        ],
+        mono: [
+          "JetBrains Mono",
+          "Fira Code",
+          "Share Tech Mono",
+          "Courier New",
+          "monospace",
+        ],
       },
       animation: {
         "fade-in": "fadeIn 0.3s ease-in-out",
