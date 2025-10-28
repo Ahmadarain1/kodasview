@@ -57,7 +57,7 @@ const NFTGrid = ({ nfts, onItemClick, searchQuery = "", filters = {} }) => {
   }
 
   return (
-    <div className="grid grid-cols-6 gap-2 max-w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 sm:gap-2 max-w-full">
       {filteredNFTs.map((nft) => {
         const isHovered = hoveredId === nft.id;
         const imageSrc = nft.image || "/placeholder.png";
@@ -105,11 +105,11 @@ const NFTGrid = ({ nfts, onItemClick, searchQuery = "", filters = {} }) => {
                 </div>
               )}
             </div>
-            <div className="p-2 bg-gray-800 text-center">
-              <div className="font-mono text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <div className="p-1 sm:p-2 bg-gray-800 text-center">
+              <div className="font-mono text-xs font-bold text-gray-400 uppercase tracking-wider truncate">
                 {nft.name || `#${nft.id}`}
               </div>
-              <div className="font-mono text-xs text-gray-500 uppercase tracking-wider">
+              <div className="font-mono text-xs text-gray-500 uppercase tracking-wider truncate">
                 ID: {nft.inscriptionId || nft.id}
               </div>
             </div>

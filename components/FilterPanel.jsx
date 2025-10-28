@@ -166,7 +166,7 @@ const NFTFilterPanel = ({ nfts, onFilterChange }) => {
                 onClick={() => toggleSection(traitType)}
               >
                 <span>
-                  L {traitType} ({traits.length}){" "}
+                  • {traitType} ({traits.length}){" "}
                   {activeCount > 0 && `(${activeCount})`}
                 </span>
                 <span className="text-xs">{isExpanded ? "−" : "+"}</span>

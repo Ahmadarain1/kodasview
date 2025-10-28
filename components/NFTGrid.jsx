@@ -130,12 +130,12 @@ const NFTGrid = ({
   return (
     <div className="w-full">
       {/* Pagination Info */}
-      <div className="mb-4 flex justify-between items-center">
-        <div className="font-mono text-sm text-gray-400">
+      <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+        <div className="font-mono text-xs sm:text-sm text-gray-400">
           Showing {startIndex + 1}-{Math.min(endIndex, filteredNFTs.length)} of{" "}
           {filteredNFTs.length} NFTs
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
           {/* Items per page selector */}
           <div className="flex gap-1">
             <button
@@ -198,7 +198,7 @@ const NFTGrid = ({
       </div>
 
       {/* NFT Grid */}
-      <div className="grid grid-cols-6 gap-2 max-w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 sm:gap-2 max-w-full">
         {paginatedNFTs.map((nft) => {
           const isHovered = hoveredId === nft.id;
           const imageUrls = generateKodaImageUrls(nft);
@@ -252,19 +252,11 @@ const NFTGrid = ({
 
                 {isHovered && (
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
-                    <span className="font-mono text-white text-sm font-bold uppercase tracking-wider">
+                    {/* <span className="font-mono text-white text-sm font-bold uppercase tracking-wider">
                       View Details
-                    </span>
+                    </span> */}
                   </div>
                 )}
-              </div>
-              <div className="p-2 bg-gray-800 text-center">
-                <div className="font-mono text-xs font-bold text-gray-400 uppercase tracking-wider">
-                  {nft.name || `#${nft.id}`}
-                </div>
-                <div className="font-mono text-xs text-gray-500 uppercase tracking-wider">
-                  ID: {nft.inscriptionId || nft.id}
-                </div>
               </div>
             </div>
           );

@@ -16,11 +16,34 @@ export default function KodaViewer() {
   const [metadata, setMetadata] = useState([]);
   const [traits, setTraits] = useState({});
   const [loadingRealData, setLoadingRealData] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     loadNFTs();
     updateTimestamp();
+    loadFavorites();
   }, []);
+
+  // Load favorites from localStorage
+  const loadFavorites = () => {
+    try {
+      const savedFavorites = localStorage.getItem("koda-favorites");
+      if (savedFavorites) {
+        setFavorites(JSON.parse(savedFavorites));
+      }
+    } catch (error) {
+      console.error("Error loading favorites:", error);
+    }
+  };
+
+  // Save favorites to localStorage
+  const saveFavorites = (newFavorites) => {
+    try {
+      localStorage.setItem("koda-favorites", JSON.stringify(newFavorites));
+    } catch (error) {
+      console.error("Error saving favorites:", error);
+    }
+  };
 
   const updateTimestamp = () => {
     const now = new Date();
@@ -235,60 +258,78 @@ export default function KodaViewer() {
     setSelectedNFT(null);
   };
 
+  // Handle adding/removing favorites
+  const toggleFavorite = (nft) => {
+    const isFavorite = favorites.some((fav) => fav.id === nft.id);
+    let newFavorites;
+
+    if (isFavorite) {
+      newFavorites = favorites.filter((fav) => fav.id !== nft.id);
+    } else {
+      newFavorites = [...favorites, nft];
+    }
+
+    setFavorites(newFavorites);
+    saveFavorites(newFavorites);
+  };
+
+  // Check if an NFT is favorited
+  const isFavorite = (nft) => {
+    return favorites.some((fav) => fav.id === nft.id);
+  };
+
+  // Get filtered NFTs based on active tab
+  const getFilteredNFTs = () => {
+    if (activeTab === "MY KODAS") {
+      return favorites;
+    }
+    return nfts;
+  };
+
   return (
-    <div className="min-h-screen bg-gray-300 p-5">
+    <div className="min-h-screen bg-gray-300 p-2 sm:p-3 lg:p-5">
       <div className="max-w-7xl mx-auto bg-black border-2 border-gray-800 shadow-2xl">
         {/* Header */}
-        <div className="bg-black border-b border-gray-700 px-6 py-4 sticky top-0 z-50">
-          <div className="flex justify-between items-center mb-4">
+        <div className="bg-black border-b border-gray-700 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 sticky top-0 z-50">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
             <div>
-              <div className="font-mono text-2xl font-bold text-white tracking-wider">
-                KODA COLLECTION
+              <div className="font-mono text-lg sm:text-xl lg:text-2xl font-bold text-white tracking-wider">
+                KODA MonkePET
                 {loadingRealData && (
-                  <span className="ml-2 text-orange-500 text-sm">
+                  <span className="ml-2 text-orange-500 text-xs sm:text-sm">
                     (Loading real data...)
                   </span>
                 )}
               </div>
-              <div className="font-mono text-sm text-gray-400">{timestamp}</div>
+              <div className="font-mono text-xs sm:text-sm text-gray-400">
+                {timestamp}
+              </div>
             </div>
-            <div className="flex gap-6 font-mono text-sm">
+            <div className="flex flex-wrap gap-2 sm:gap-4 lg:gap-6 font-mono text-xs sm:text-sm">
               <Link
                 href="/"
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                MONKEDEX
+                KodaDEX
               </Link>
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                AUCTION RESULTS
+                full nodes
               </a>
-              {/* <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                TOP SALES
-              </a> */}
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 TWITTER
               </a>
-              {/* <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                DISCORD
-              </a> */}
             </div>
           </div>
 
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             <div
-              className={`px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500 ${
+              className={`px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-xs sm:text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500 ${
                 activeTab === "ALL" ? "bg-orange-500 border-orange-500" : ""
               }`}
               onClick={() => setActiveTab("ALL")}
@@ -296,16 +337,16 @@ export default function KodaViewer() {
               ALL
             </div>
             <div
-              className={`px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500 ${
+              className={`px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-xs sm:text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500 ${
                 activeTab === "MY KODAS"
                   ? "bg-orange-500 border-orange-500"
                   : ""
               }`}
               onClick={() => setActiveTab("MY KODAS")}
             >
-              MY KODAS
+              MY KODAS ({favorites.length})
             </div>
-            <div
+            {/* <div
               className={`px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500 ${
                 activeTab === "WALLET LOOKUP"
                   ? "bg-orange-500 border-orange-500"
@@ -314,12 +355,12 @@ export default function KodaViewer() {
               onClick={() => setActiveTab("WALLET LOOKUP")}
             >
               WALLET LOOKUP
-            </div>
+            </div> */}
           </div>
 
-          <div className="flex justify-between items-center gap-4">
-            <div className="flex gap-2 items-center">
-              <span className="font-mono text-sm text-gray-400 whitespace-nowrap">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+              <span className="font-mono text-xs sm:text-sm text-gray-400 whitespace-nowrap">
                 LOOKUP ID / KODA NO.
               </span>
               <input
@@ -327,27 +368,29 @@ export default function KodaViewer() {
                 placeholder="ex, 2291"
                 value={searchQuery}
                 onChange={handleSearch}
-                className="bg-gray-800 border border-gray-700 text-white px-3 py-2 font-mono text-sm transition-all focus:outline-none focus:border-orange-500 focus:bg-gray-700 w-48"
+                className="bg-gray-800 border border-gray-700 text-white px-3 py-2 font-mono text-xs sm:text-sm transition-all focus:outline-none focus:border-orange-500 focus:bg-gray-700 w-full sm:w-48"
               />
-              <button className="px-4 py-2 bg-gray-800 border border-gray-700 text-white font-mono text-sm cursor-pointer transition-all hover:bg-gray-700 hover:border-orange-500">
-                &lt;CONNECT WALLET&gt;
-              </button>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex min-h-screen">
+        <div className="flex flex-col lg:flex-row min-h-screen">
           {/* Sidebar Filters */}
-          <NFTFilterPanel nfts={nfts} onFilterChange={handleFilterChange} />
+          <div className="lg:w-80 lg:flex-shrink-0">
+            <NFTFilterPanel
+              nfts={getFilteredNFTs()}
+              onFilterChange={handleFilterChange}
+            />
+          </div>
 
           {/* Grid View */}
-          <div className="flex-1 bg-black p-4 overflow-y-auto h-screen">
+          <div className="flex-1 bg-black p-2 sm:p-4 overflow-y-auto h-screen">
             {loading ? (
               <LoadingSkeleton count={30} />
             ) : (
               <NFTGrid
-                nfts={nfts}
+                nfts={getFilteredNFTs()}
                 searchQuery={searchQuery}
                 filters={filters}
                 onItemClick={handleItemClick}
@@ -360,7 +403,12 @@ export default function KodaViewer() {
 
       {/* Detail Modal */}
       {selectedNFT && (
-        <NFTDetailModal nft={selectedNFT} onClose={handleCloseModal} />
+        <NFTDetailModal
+          nft={selectedNFT}
+          onClose={handleCloseModal}
+          onToggleFavorite={toggleFavorite}
+          isFavorite={isFavorite(selectedNFT)}
+        />
       )}
     </div>
   );

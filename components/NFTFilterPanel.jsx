@@ -125,11 +125,33 @@ const NFTFilterPanel = ({ nfts, onFilterChange }) => {
     0
   );
 
+  // Calculate filtered NFT count based on active filters
+  const filteredNFTCount = useMemo(() => {
+    if (!hasActiveFilters) {
+      return nfts.length;
+    }
+
+    return nfts.filter((nft) => {
+      // Check if NFT matches all active filters
+      for (const [traitType, selectedValues] of Object.entries(activeFilters)) {
+        if (selectedValues && selectedValues.length > 0) {
+          const nftTrait = nft.attributes?.find(
+            (attr) => attr.trait_type === traitType
+          );
+          if (!nftTrait || !selectedValues.includes(nftTrait.value)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }).length;
+  }, [nfts, activeFilters, hasActiveFilters]);
+
   return (
-    <div className="bg-black border-r border-gray-700 p-4 w-80 overflow-y-auto sticky top-0 h-screen">
+    <div className="bg-black border-r border-gray-700 p-2 sm:p-4 w-full lg:w-80 overflow-y-auto sticky top-0 h-screen lg:h-auto lg:max-h-screen">
       {/* Sort By Section */}
-      <div className="mb-6">
-        <div className="font-mono text-sm font-bold text-white mb-3 uppercase tracking-wider">
+      <div className="mb-4 sm:mb-6">
+        <div className="font-mono text-xs sm:text-sm font-bold text-white mb-3 uppercase tracking-wider">
           SORT BY &gt;
         </div>
         <div
@@ -170,7 +192,7 @@ const NFTFilterPanel = ({ nfts, onFilterChange }) => {
       {/* Filters Section */}
       <div className="mb-6">
         <div className="font-mono text-sm font-bold text-white mb-3 uppercase tracking-wider">
-          FILTERS ({activeFilterCount}) - {nfts.length}/10,000
+          FILTERS ({activeFilterCount}) - {filteredNFTCount}/10,000
         </div>
         {hasActiveFilters && (
           <div className="mb-4">
@@ -216,7 +238,7 @@ const NFTFilterPanel = ({ nfts, onFilterChange }) => {
                 onClick={() => toggleSection(traitType)}
               >
                 <span>
-                  L {traitType} ({traits.length}){" "}
+                  • {traitType} ({traits.length}){" "}
                   {activeCount > 0 && `(${activeCount})`}
                 </span>
                 <span className="text-xs">{isExpanded ? "−" : "+"}</span>

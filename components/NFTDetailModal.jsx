@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 
-const NFTDetailModal = ({ nft, onClose, onNext }) => {
+const NFTDetailModal = ({
+  nft,
+  onClose,
+  onNext,
+  onToggleFavorite,
+  isFavorite,
+}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -208,20 +214,20 @@ const NFTDetailModal = ({ nft, onClose, onNext }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-95 backdrop-blur-sm z-50 flex items-center justify-center p-8 animate-fadeIn"
+      className="fixed inset-0 bg-black bg-opacity-95 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 lg:p-8 animate-fadeIn"
       onClick={onClose}
     >
       <div
-        className="bg-black border-4 border-white max-w-4xl w-full max-h-[90vh] overflow-hidden animate-scaleUp"
+        className="bg-black border-2 sm:border-4 border-white max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden animate-scaleUp mx-2 sm:mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with ESC button */}
-        <div className="px-6 py-4 border-b-2 border-white bg-black flex items-center justify-between">
-          <div className="font-mono text-lg font-semibold text-white uppercase tracking-widest">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b-2 border-white bg-black flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="font-mono text-sm sm:text-base lg:text-lg font-semibold text-white uppercase tracking-widest">
             MONKE {nft.id} / INSCRIPTION {nft.inscriptionId || nft.id}
           </div>
           <button
-            className="font-mono text-base font-semibold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors tracking-wider"
+            className="font-mono text-sm sm:text-base font-semibold text-white uppercase px-3 sm:px-4 py-2 hover:text-orange-500 transition-colors tracking-wider"
             onClick={onClose}
           >
             &lt;ESC&gt;
@@ -229,7 +235,7 @@ const NFTDetailModal = ({ nft, onClose, onNext }) => {
         </div>
 
         {/* Main content */}
-        <div className="p-6 grid grid-cols-2 gap-8 bg-black min-h-[400px]">
+        <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 bg-black min-h-[400px]">
           {/* Left side - Image */}
           <div className="relative bg-orange-500 aspect-square flex items-center justify-center overflow-hidden">
             {!imageLoaded && (
@@ -265,9 +271,9 @@ const NFTDetailModal = ({ nft, onClose, onNext }) => {
           </div>
 
           {/* Right side - Details */}
-          <div className="flex flex-col gap-4 bg-black">
+          <div className="flex flex-col gap-3 sm:gap-4 bg-black">
             <div className="flex flex-col gap-2">
-              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
+              <div className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">
                 RARITY - {rarity} / 10000
               </div>
 
@@ -276,26 +282,26 @@ const NFTDetailModal = ({ nft, onClose, onNext }) => {
                 nft.attributes.map((attr, index) => (
                   <div
                     key={index}
-                    className="font-mono text-sm font-semibold text-white uppercase tracking-wider mb-1"
+                    className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider mb-1"
                   >
                     {attr.trait_type.toUpperCase()} ▸ {attr.value.toUpperCase()}
                   </div>
                 ))
               ) : (
-                <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
+                <div className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">
                   NO TRAITS AVAILABLE
                 </div>
               )}
 
-              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider mb-1">
+              <div className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider mb-1">
                 TRAIT COUNT ▸ {traitCount}
               </div>
 
-              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
+              <div className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">
                 SIZE - {Math.floor(Math.random() * 500) + 200} BYTES
               </div>
 
-              <div className="font-mono text-sm font-semibold text-white uppercase tracking-wider">
+              <div className="font-mono text-xs sm:text-sm font-semibold text-white uppercase tracking-wider">
                 SAT -{" "}
                 {Math.floor(Math.random() * 1000000000000000) + 100000000000000}
               </div>
@@ -334,20 +340,34 @@ const NFTDetailModal = ({ nft, onClose, onNext }) => {
         </div>
 
         {/* Footer buttons */}
-        <div className="px-6 py-4 border-t-2 border-white bg-black flex justify-between items-center">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t-2 border-white bg-black flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button
+              className={`font-mono text-xs sm:text-sm font-semibold uppercase px-3 sm:px-4 py-2 transition-colors border border-white hover:border-orange-500 tracking-wider ${
+                isDownloading
+                  ? "text-orange-500 cursor-not-allowed"
+                  : "text-white hover:text-orange-500"
+              }`}
+              onClick={handleDownload}
+              disabled={isDownloading}
+            >
+              {isDownloading ? "DOWNLOADING..." : "DOWNLOAD"}
+            </button>
+            {onToggleFavorite && (
+              <button
+                className={`font-mono text-xs sm:text-sm font-semibold uppercase px-3 sm:px-4 py-2 transition-colors border tracking-wider ${
+                  isFavorite
+                    ? "text-orange-500 border-orange-500 bg-orange-500 bg-opacity-20"
+                    : "text-white border-white hover:text-orange-500 hover:border-orange-500"
+                }`}
+                onClick={() => onToggleFavorite(nft)}
+              >
+                {isFavorite ? "★ FAVORITED" : "☆ ADD TO FAVORITES"}
+              </button>
+            )}
+          </div>
           <button
-            className={`font-mono text-sm font-semibold uppercase px-4 py-2 transition-colors border border-white hover:border-orange-500 tracking-wider ${
-              isDownloading
-                ? "text-orange-500 cursor-not-allowed"
-                : "text-white hover:text-orange-500"
-            }`}
-            onClick={handleDownload}
-            disabled={isDownloading}
-          >
-            {isDownloading ? "DOWNLOADING..." : "DOWNLOAD"}
-          </button>
-          <button
-            className="font-mono text-sm font-semibold text-white uppercase px-4 py-2 hover:text-orange-500 transition-colors border border-white hover:border-orange-500 tracking-wider"
+            className="font-mono text-xs sm:text-sm font-semibold text-white uppercase px-3 sm:px-4 py-2 hover:text-orange-500 transition-colors border border-white hover:border-orange-500 tracking-wider"
             onClick={handleNext}
           >
             NEXT →
